@@ -1,36 +1,37 @@
-import gplay from "google-play-scraper";
+import fetch from 'node-fetch'
 
-let handler = async (m, { conn, text }) => {
-  const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
-  const tradutor = _translate.plugins.buscador_playstore
-  
-  if (!text) throw `*${tradutor.texto1}*`;
-  let res = await gplay.search({ term: text });
-  if (!res.length) throw `*${tradutor.texto2}*`;
-  let opt = {
-    contextInfo: {
-      externalAdReply: {
-        title: res[0].title,
-        body: res[0].summary,
-        thumbnail: (await conn.getFile(res[0].icon)).data,
-        sourceUrl: res[0].url,
-      },
-    },
-  };
-  await console.log(res);
-  res = res.map(
-    (v) =>
-      `${tradutor.texto3[0]} ${v.title}
-      ${tradutor.texto3[1]} ${v.developer}
-      ${tradutor.texto3[2]} ${v.priceText}
-      ${tradutor.texto3[3]} ${v.scoreText}
-      ${tradutor.texto3[4]}${v.url}`
-  ).join`\n\n`;
-  m.reply(res, null, opt);
-};
-handler.help = ['playstore <aplicacion>'];
-handler.tags = ['internet'];
-handler.command = /^(playstore)$/i;
-export default handler;
+let handler = async (m, { conn, text, args }) => {
+	if (!args[0]) throw `*[❗] اكتب اسم التطبيق ال انت عاوز تبحث عنه يحب*`
+	let enc = encodeURIComponent(text)
+try {
+let json = await fetch(`https://latam-api.vercel.app/api/playstore?apikey=brunosobrino&q=${enc}`)
+let gPlay = await json.json()
+if (!gPlay.titulo) return m.reply(`[ ! ] بدون نتائج`)
+conn.sendMessage(m.chat,{image:{url: gPlay.imagen},caption:`🔍 نتيجة البحث: ${gPlay.titulo}
+───────•••───────
+🧬 المعرف: ${gPlay.id}
+───────•••───────
+⛓️ الرابط: ${gPlay.link}
+───────•••───────
+🖼️ الصوره: ${gPlay.imagen}
+───────•••───────
+✍️ المطور: ${gPlay.desarrollador}
+───────•••───────
+📜 الوصف: ${gPlay.descripcion}
+───────•••───────
+💲 العملة: ${gPlay.moneda}
+───────•••───────
+💸 السعر: ${gPlay.precio}
+───────•••───────
+📈 التقيم: ${gPlay.puntuacion}`},{quoted:m})
+} catch (e) {
+await m.reply('اووف السيرفر وقع 🤡 حاول تاني')    
+console.log(e)
+}
+}
+
+handler.help = ['playstore <aplicacion>']
+handler.tags = ['internet']
+handler.command = /^(المتجر|متجر|جوجل-بلاي)$/i
+
+export default handler 
