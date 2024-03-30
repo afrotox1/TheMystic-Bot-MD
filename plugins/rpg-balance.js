@@ -1,26 +1,20 @@
-
-
-const handler = async (m, {usedPrefix}) => {
-  const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
-  const tradutor = _translate.plugins.rpg_balance
-
-  let who;
-  if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.sender;
-  else who = m.sender;
-  const name = conn.getName(who);
-  m.reply(`
-${tradutor.texto1[0]}
-${tradutor.texto1[1]} ${name}
-${tradutor.texto1[2]} ${global.db.data.users[who].limit}💎
-${tradutor.texto1[3]}
-${tradutor.texto1[4]} 
-${tradutor.texto1[5]}
-❏ *${usedPrefix}buy ${tradutor.texto1[6]}
-❏ *${usedPrefix}buyall*`);
-};
-handler.help = ['bal'];
-handler.tags = ['xp'];
-handler.command = ['bal', 'diamantes', 'diamond', 'balance'];
-export default handler;
+let handler = async (m, {usedPrefix}) => {	
+let who
+if (m.isGroup) who = m.mentionedJid[0] ? m.mentionedJid[0] : m.sender
+else who = m.sender
+let name = conn.getName(who) 
+m.reply(`
+┌───⊷ 𝑩𝒂𝒍𝒂𝒏𝒄𝒆 ⊶
+▢ *𝑵𝒐𝒎𝒃𝒓𝒆:* ${name}
+▢ *𝑫𝒊𝒂𝒎𝒂𝒏𝒕𝒆:* ${global.db.data.users[who].limit}💎
+└──────────────
+*𝑵𝒐𝒕𝒂:* 
+*𝑷𝒖𝒆𝒅𝒆𝒔 𝒄𝒐𝒎𝒑𝒓𝒂𝒓 𝒅𝒊𝒂𝒎𝒂𝒏𝒕𝒆 💎 𝑼𝒔𝒂𝒅𝒐 𝒍𝒐𝒔 𝒄𝒐𝒎𝒂𝒏𝒅𝒐́*
+❏ *${usedPrefix}buy <cantidad>*
+❏ *${usedPrefix}buyall*`)
+}
+handler.help = ['bal']
+handler.tags = ['xp']
+handler.command = ['bal', 'diamantes', 'diamond', 'balance'] 
+handler.register = true
+export default handler

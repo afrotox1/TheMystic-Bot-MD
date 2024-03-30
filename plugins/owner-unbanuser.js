@@ -1,23 +1,10 @@
+let handler = async (m) => {
+global.db.data.chats[m.chat].isBanned = false
+m.reply('* تم إلغاء حظر هذه الدردشة بنجاح*')
+}
+handler.help = ['unbanchat']
+handler.tags = ['owner']
+handler.command = /^الغاء-الحظر|رفع-الحظر$/i
+handler.rowner = true
+export default handler
 
-
-
-const handler = async (m, {conn, text}) => {
-  const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
-  const tradutor = _translate.plugins.owner_unbanuser
-
-  if (!text) throw tradutor.texto1;
-  let who;
-  if (m.isGroup) who = m.mentionedJid[0];
-  else who = m.chat;
-  if (!who) throw tradutor.texto2;
-  const users = global.db.data.users;
-  users[who].banned = false;
-  conn.reply(m.chat, tradutor.texto3, m);
-};
-handler.help = ['unbanuser'];
-handler.tags = ['owner'];
-handler.command = /^unbanuser$/i;
-handler.rowner = true;
-export default handler;

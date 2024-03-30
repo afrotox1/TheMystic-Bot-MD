@@ -1,16 +1,9 @@
-import {toDataURL} from 'qrcode';
-
-
-const handler = async (m, {text, conn}) => {
-  const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
-  const tradutor = _translate.plugins.herramientas_qrcode
-
-  if (!text) throw tradutor.texto1;
-  conn.sendFile(m.chat, await toDataURL(text.slice(0, 2048), {scale: 8}), 'qrcode.png', '¯\\_(ツ)_/¯', m);
-};
-handler.help = ['', 'code'].map((v) => 'qr' + v + ' <teks>');
-handler.tags = ['tools'];
-handler.command = /^qr(code)?$/i;
-export default handler;
+import { toDataURL } from 'qrcode'
+let handler = async (m, { text, conn }) => {
+if (!text) throw `*حط النص او رقم التلفون او اي حاجه انت عاوز تحولها لباركود (Qr Code)*`
+conn.sendFile(m.chat, await toDataURL(text.slice(0, 2048), { scale: 8 }), 'qrcode.png', '¯\\_(𝐵𝑌:𝑺𝐻𝐴𝐷𝑂𝑊&𝐸𝐿𝐺𝐴𝑍𝐴𝑅)_/¯', m)
+}
+handler.help = ['', 'code'].map(v => 'qr' + v + ' <teks>')
+handler.tags = ['tools']
+handler.command = /^qr(code)?|كود|باركود$/i
+export default handler
