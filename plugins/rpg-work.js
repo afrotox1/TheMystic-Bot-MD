@@ -1,44 +1,55 @@
-
-
-const handler = async (m, { conn, isPrems }) => {
-  const datas = global
-  const idioma = datas.db.data.users[m.sender].language
-  const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`))
-  const tradutor = _translate.plugins.rpg_work
-
-  global.work = tradutor.texto1;
-
-
-  let enviando;
-  if (enviando) return
-  enviando = true
-  const hasil = Math.floor(Math.random() * 5000);
-  const time = global.db.data.users[m.sender].lastwork + 600000;
-  if (new Date - global.db.data.users[m.sender].lastwork < 600000) throw `⚔️ *¡Espera un momento pequeño aventurero!* ⚔️\n\n*—◉ Regresa a la travesía en ${msToTime(time - new Date())} ⏳*`;
-  conn.sendMessage(m.chat, { text: `🏞️ *Te embarcas en una emocionante aventura:*\n\n🛠️ *${pickRandom(global.work)}*\n\n*¡Ganaste ${hasil} exp por tu valentía!*` }, { quoted: m });
-  global.db.data.users[m.sender].exp += hasil;
-  global.db.data.users[m.sender].lastwork = new Date() * 1;
-  enviando = false
-};
-handler.help = ['work'];
-handler.tags = ['xp'];
-handler.command = /^(work|trabajar|chambear)$/i
-handler.fail = null;
-export default handler;
+let handler = async (m, { conn, isPrems}) => {
+let hasil = Math.floor(Math.random() * 5000)
+let time = global.db.data.users[m.sender].lastwork + 600000
+if (new Date - global.db.data.users[m.sender].lastwork < 600000) throw `*أنت متعب يجب أن تستريح على الأقل ${msToTime(time - new Date())}للعودة إلى العمل!*`
+ 
+await delay(3 * 3000)
+m.reply(`${pickRandom(global.work)} *${hasil} خبره*`)
+global.db.data.users[m.sender].lastwork = new Date * 1
+}
+handler.help = ['work']
+handler.tags = ['xp']
+handler.command = ['عمل', 'trabajar']
+handler.fail = null
+handler.exp = 0
+export default handler
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function msToTime(duration) {
-  const milliseconds = parseInt((duration % 1000) / 100);
-  let seconds = Math.floor((duration / 1000) % 60);
-  let minutes = Math.floor((duration / (1000 * 60)) % 60);
-  let hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-  hours = (hours < 10) ? '0' + hours : hours;
-  minutes = (minutes < 10) ? '0' + minutes : minutes;
-  seconds = (seconds < 10) ? '0' + seconds : seconds;
-  return minutes + ' minutos ' + seconds + ' segundos ';
+var milliseconds = parseInt((duration % 1000) / 100),
+seconds = Math.floor((duration / 1000) % 60),
+minutes = Math.floor((duration / (1000 * 60)) % 60),
+hours = Math.floor((duration / (1000 * 60 * 60)) % 24)
+hours = (hours < 10) ? "0" + hours : hours
+minutes = (minutes < 10) ? "0" + minutes : minutes
+seconds = (seconds < 10) ? "0" + seconds : seconds
+
+return minutes + " دقائق " + seconds + " ثواني " 
 }
+
 
 function pickRandom(list) {
-  return list[Math.floor(list.length * Math.random())];
+return list[Math.floor(list.length * Math.random())]
 }
 
-
+global.work = ["مطور مواقع ويب", "مطور العاب", "احد مطورين شادو بوت 🌚", "مساعد تنسيق في شادو بوت", "مساعد مشرف علي مجموعات يوسف السلطان", "مطور العاب", "عملت في منجم", "منظم حفلات من اجل الحصول علي",
+ "مساعد طبيب ", "تعمل كطباخ", 
+"تعمل كمهندس ", 
+"تعمل كطبيب", 
+"تعمل في بنك ", 
+"جاء شخص ما وأقام مسرحية وانت عملت كاحد طاقميها", "قمت بشراء وبيع العناصر وكسبت", 
+"تعمل في بيتزا هوت وتكسب", 
+"انت تعمل ككاتب وتكسب", "تذهب من خلال حقيبتك وتقرر بيع بعض العناصر غير المفيدة التي لا تحتاج إليها. تبين أن كل هذا الهراء كان يستحق", 
+"تساعد محتاج وتحصل", 
+"أنت تطور الألعاب من أجل لقمة العيش وتفوز", 
+"لقد ربحت مسابقة أكل الفلفل الحار. الجائزة", 
+"تعمل طوال اليوم في شركه وتربح", 
+"تنضم لفريق شادو والحزا *ES* وتحصل علي", "لقد صممت شعار تيم شادو والجزار *ES* وحصلت علي", 
+"لقد قمت بالاشراف علي مجموعه *ES* عندما لم يكن موجود تفوز ب ", 
+"لقد عمل بأفضل ما لديه في شركة طباعة كانت توظف وحصلت علي", 
+"احد افراد تيم شادو والجزار *ES*", "لقد زاد الطلب على ألعاب الأجهزة المحمولة ، لذا يمكنك إنشاء لعبة جديدة مليئة بالمعاملات الصغيرة. مع لعبتك الجديدة تكسب", 
+"أنت تعمل كممثل صوتي لـسبونج بوب وتمكنت من الفوز ب ", 
+"كنت تزرع وفزت ب", "تبني قلعة رملية وتربح", "لقد عملت وربحت", 
+"تعمل كصانع لوجوهات لتيم شادو والجزار وتحصل علي","تعمل كبلوجر وتحصل علي", 
+"تعمل علي بريمير لتعديل الفديوهات وتحصل علي"
+]
